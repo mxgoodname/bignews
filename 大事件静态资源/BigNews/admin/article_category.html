@@ -96,7 +96,7 @@
                 <td class="text-center">
                     <a href="javascript:void(0)" data-id="{{$value.id}}" data-toggle="modal"
                     data-target="#myModal" class=" btn btn-info btn-xs" >编辑</a>
-                    <a href="javascript:void(0)" data-id="{{$value.id}}" class="btn btn-danger btn-xs">删除</a>
+                    <a href="javascript:void(0)" data-id="{{$value.id}}" class="btn btn-danger btn-xs" id="delete">删除</a>
                 </td>
             </tr>
         {{/each}}
@@ -128,9 +128,26 @@
                     // 改变样式
                     $('#updata').text('新增').addClass('btn-success').removeClass('btn-primary');
 
+                    // 点击新增文章分类
+                    $('#updata').on('click', function () {
+                        $.post({
+                            url: BigNew.category_add,
+                            data: {
+                                name: $('#recipient-name').val(),
+                                slug: $('#message-text').val()
+                            },
+                            success: function (res) {
+                                // console.log(res);
+                                if (res.code == 201) {
+                                    $('#myModal').modal('hide');
+                                    getData();
+                                }
+                            }
+                        });
+                    });
 
-                } else {
                     // 如果是点击编辑
+                } else {
                     $('#exampleModalLabel').text('编辑文章分类');
                     $('#updata').text('编辑').addClass('btn-primary').removeClass('btn-success');
                     var id = $(e.relatedTarget).attr('data-id');
@@ -146,8 +163,9 @@
                             $('#cencel').val(res.data[0].id);
                         }
                     });
-                    // 点击完成编辑改变数据
 
+
+                    // 点击完成编辑修改文章分类
                     $('#updata').on('click', function () {
                         $.post({
                             url: BigNew.category_edit,
@@ -165,8 +183,29 @@
                         });
                     });
                 }
+
+                // 模态框隐藏式初始化
+                $('#myModal').on('hidden.bs.modal', function (e) {
+                    $('form')[0].reset();
+                })
             })
 
+
+            // 删除事件
+            $('tbody').on('click', '#delete', function () {
+                var check = confirm('请确认是否删除');
+                if (check) {
+                    $.post({
+                        url: BigNew.category_delete,
+                        data: {
+                            id: $(this).attr('data-id')
+                        },
+                        success: function () {
+                            getData();
+                        }
+                    });
+                }
+            });
         })
 
     </script>
