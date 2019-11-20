@@ -68,6 +68,31 @@
             </form>
         </div>
     </div>
+
+    <script src="./libs/http.js"></script>
+    <script>
+        $.get({
+            url: window.BigNew.user_detail,
+            success: function (res) {
+                if (res.code === 200) {
+                    // $('.username').val(res.data.username);
+                    // $('.nickname').val(res.data.nickname);
+                    // $('.email').val(res.data.email);
+                    // $('.password').val(res.data.password);
+
+                    // 简化
+                    // 遍历res.data对象
+                    for (var key in res.data) {
+                        $('.' + key).val(res.data[key]);
+                    }
+                    $('.user_pic').prop('src', res.data.userPic);
+                }
+
+
+            }
+        })
+
+    </script>
 </body>
 
 </html>
