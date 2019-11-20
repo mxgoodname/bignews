@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="./libs/jquery-1.12.4.min.js"></script>
+    <!-- 引入bootstrap的js文件 -->
+    <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
 
 </head>
 
@@ -69,9 +71,33 @@
         </div>
     </div>
 
+    <!-- 模态框 -->
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">温馨提示</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
     <script src="./libs/http.js"></script>
     <script>
         $(function () {
+            // 请求数据渲染页面
             $.get({
                 url: window.BigNew.user_detail,
                 success: function (res) {
@@ -97,6 +123,39 @@
                 // 图片信息对象转换成地址信息
                 var url = URL.createObjectURL(this.files[0]);
                 $('.user_pic').prop('src', url);
+            });
+
+            // 修改用户信息
+            $('.btn-edit').on('click', function (e) {
+                // 新建二进制空对象
+                e.preventDefault();
+                // 获取表单信息
+                var form = $('#form')[0];
+                // 转换成二进制
+                var data = new FormData(form);
+
+                // ajax请求
+                $.post({
+                    url: window.BigNew.user_edit,
+                    data: data,
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        // parent.window.location.reload();
+                        $('.modal-body').text(res.msg);
+                        $('#myModal').modal();
+                        $.get({
+                            url: window.BigNew.user_info,
+                            success: function (res) {
+                                // 渲染页面
+                                parent.$('.user_info>img').prop('src', res.data.userPic);
+                                parent.$('.user_info>span').html('欢迎&nbsp;&nbsp;' + res.data.nickname);
+                                parent.$('.user_center_link>img').prop('src', res.data.userPic);
+                                // window.location.reload();
+                            }
+                        });
+                    }
+                });
             });
         })
 
