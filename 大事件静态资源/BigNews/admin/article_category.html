@@ -31,14 +31,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <!-- <tr>
                         <td>奇趣事</td>
                         <td>funny</td>
                         <td class="text-center">
                             <a href="javascript:void(0)" data-toggle="modal" class=" btn btn-info btn-xs">编辑</a>
                             <a href="javascript:void(0)" class="btn btn-danger btn-xs">删除</a>
                         </td>
-                    </tr>
+                    </tr> -->
                 </tbody>
                 <tfoot>
                     <tr>
@@ -51,5 +51,43 @@
             </table>
         </div>
     </div>
+
+    <!-- 引入封装的数据地址函数 -->
+    <script src="./libs/http.js"></script>
+    <script type="text/html" id="list">
+        {{each data}}
+            <tr>
+                <td>{{$value.name}}</td>
+                <td>{{$value.slug}}</td>
+                <td class="text-center">
+                    <a href="javascript:void(0)" data-id="{{$value.id}}" data-toggle="modal" class=" btn btn-info btn-xs">编辑</a>
+                    <a href="javascript:void(0)" data-id="{{$value.id}}" class="btn btn-danger btn-xs">删除</a>
+                </td>
+            </tr>
+        {{/each}}
+
+    </script>
+
+    <script>
+        $(function () {
+            // 调用渲染页面函数
+            getData();
+            // 把渲染页面封装成函数
+            function getData() {
+                $.get({
+                    url: window.BigNew.category_list,
+                    success: function (res) {
+                        var htmlStr = template('list', res);
+                        $('tbody').html(htmlStr);
+                    }
+                });
+            }
+
+
+
+        })
+
+    </script>
+</body>
 
 </html>
