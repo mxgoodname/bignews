@@ -52,15 +52,49 @@
         </div>
     </div>
 
+
+
+    <!-- 模态框 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">新增文章分类</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">文章分类名称:</label>
+                            <input type="text" class="form-control" id="recipient-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="control-label">文章分类别名:</label>
+                            <textarea class="form-control" id="message-text"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="updata">新增</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- 引入封装的数据地址函数 -->
     <script src="./libs/http.js"></script>
+    <!-- 模板 -->
     <script type="text/html" id="list">
         {{each data}}
             <tr>
                 <td>{{$value.name}}</td>
                 <td>{{$value.slug}}</td>
                 <td class="text-center">
-                    <a href="javascript:void(0)" data-id="{{$value.id}}" data-toggle="modal" class=" btn btn-info btn-xs">编辑</a>
+                    <a href="javascript:void(0)" data-id="{{$value.id}}" data-toggle="modal"
+                    data-target="#myModal" class=" btn btn-info btn-xs" id="change">编辑</a>
                     <a href="javascript:void(0)" data-id="{{$value.id}}" class="btn btn-danger btn-xs">删除</a>
                 </td>
             </tr>
@@ -82,8 +116,25 @@
                     }
                 });
             }
+            // 用data属性调用模态框 在html中
+            // show.bs.modal模态框事件
+            $('#myModal').on('show.bs.modal', function (e) {
+                // 如果是新增
+                if (e.relatedTarget === $('#xinzengfenlei')[0]) {   // e.relatedTarget就是触发模态框的元素
+                    // 改变模态框内容
+                    $('#exampleModalLabel').text('新增文章分类');
+                    // 改变样式
+                    $('#updata').text('新增').addClass('btn-success').removeClass('btn-primary');
 
 
+                } else {
+                    // 如果是点击编辑
+                    $('#exampleModalLabel').text('编辑文章分类');
+                    $('#updata').text('编辑').addClass('btn-primary').removeClass('btn-success');
+
+
+                }
+            })
 
         })
 
