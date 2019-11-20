@@ -44,11 +44,11 @@
                     <label for="inputPassword3" class="col-sm-2 control-label">用户图标：</label>
                     <div class="col-sm-10">
                         <img src="images/2.jpg" alt="" class="user_pic">
-                        <input style="display: block" name="userPic" type="file" id="exampleInputFile">
+                        <input style="display: none" name="userPic" type="file" id="exampleInputFile">
                         <!-- 给label标签的for属性赋值,值是input标签的id,那这样的话点击label就相当于点击了input -->
                         <br>
                         <label for="exampleInputFile">
-                            <img src="./images/uploads_icon.jpg" style="height: 50px;" alt="">
+                            <img src="./images/up.jpg" style="height: 50px;" alt="">
                         </label>
                     </div>
                 </div>
@@ -75,12 +75,13 @@
             $.get({
                 url: window.BigNew.user_detail,
                 success: function (res) {
+                    // console.log(res);
+
                     if (res.code === 200) {
                         // $('.username').val(res.data.username);
                         // $('.nickname').val(res.data.nickname);
                         // $('.email').val(res.data.email);
                         // $('.password').val(res.data.password);
-
                         // 简化
                         // 遍历res.data对象
                         for (var key in res.data) {
@@ -89,7 +90,14 @@
                         $('.user_pic').prop('src', res.data.userPic);
                     }
                 }
-            })
+            });
+
+            // 头像预览
+            $('#exampleInputFile').on('change', function () {
+                // 图片信息对象转换成地址信息
+                var url = URL.createObjectURL(this.files[0]);
+                $('.user_pic').prop('src', url);
+            });
         })
 
     </script>
