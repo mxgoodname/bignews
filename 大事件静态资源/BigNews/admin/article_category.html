@@ -65,6 +65,7 @@
                 </div>
                 <div class="modal-body">
                     <form>
+                        <input type="hidden" name="" id="cencel" value="">
                         <div class="form-group">
                             <label for="recipient-name" class="control-label">文章分类名称:</label>
                             <input type="text" class="form-control" id="recipient-name">
@@ -94,7 +95,7 @@
                 <td>{{$value.slug}}</td>
                 <td class="text-center">
                     <a href="javascript:void(0)" data-id="{{$value.id}}" data-toggle="modal"
-                    data-target="#myModal" class=" btn btn-info btn-xs" id="change">编辑</a>
+                    data-target="#myModal" class=" btn btn-info btn-xs" >编辑</a>
                     <a href="javascript:void(0)" data-id="{{$value.id}}" class="btn btn-danger btn-xs">删除</a>
                 </td>
             </tr>
@@ -118,6 +119,7 @@
             }
             // 用data属性调用模态框 在html中
             // show.bs.modal模态框事件
+
             $('#myModal').on('show.bs.modal', function (e) {
                 // 如果是新增
                 if (e.relatedTarget === $('#xinzengfenlei')[0]) {   // e.relatedTarget就是触发模态框的元素
@@ -131,8 +133,37 @@
                     // 如果是点击编辑
                     $('#exampleModalLabel').text('编辑文章分类');
                     $('#updata').text('编辑').addClass('btn-primary').removeClass('btn-success');
+                    var id = $(e.relatedTarget).attr('data-id');
+                    $.get({
+                        url: BigNew.category_search,
+                        data: {
+                            id: id
+                        },
+                        success: function (res) {
+                            // 编辑时模态框渲染
+                            $('#recipient-name').val(res.data[0].name);
+                            $('#message-text').val(res.data[0].slug);
+                            $('#cencel').val(res.data[0].id);
+                        }
+                    });
+                    // 点击完成编辑改变数据
 
-
+                    $('#updata').on('click', function () {
+                        $.post({
+                            url: BigNew.category_edit,
+                            data: {
+                                id: $('#cencel').val(),
+                                name: $('#recipient-name').val(),
+                                slug: $('#message-text').val()
+                            },
+                            success: function (res) {
+                                if (res.code == 200) {
+                                    $('#myModal').modal('hide');
+                                    getData();
+                                }
+                            }
+                        });
+                    });
                 }
             })
 
