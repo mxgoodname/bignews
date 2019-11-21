@@ -268,7 +268,7 @@
                 },
                 success: function (res) {
                   // 页数改变的时候 跳到上一页
-                  if (res.data.data === 0) {
+                  if (res.data.data.length === 0) {
                     $('#pagination').twbsPagination('changeTotalPages', res.data.totalPage, mypage - 1);
                   }
                   var htmlStr = template('list', res);
