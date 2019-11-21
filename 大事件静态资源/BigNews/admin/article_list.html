@@ -208,7 +208,10 @@
                                     perpage: perpage
                                 },
                                 success: function (res) {
-                                    $('#pagination').twbsPagination('changeTotalPages', res.data.totalPage, 1);
+                                    console.log(res);
+                                    if (res.data.data.length === 0) {
+                                        $('#pagination').twbsPagination('changeTotalPages', res.data.totalPage, mypage - 1);
+                                    }
                                     var htmlStr = template('content', res);
                                     $('tbody').html(htmlStr);
                                 }

@@ -177,10 +177,10 @@
            
             
             {{if $value.state==='待审核'}} 
-            <a href="javascript:void(0);;"  class="btn btn-primary btn-xs">批准</a>
-            <a href="javascript:void(0);;"  class="btn btn-warning btn-xs">拒绝</a>
+            <a href="javascript:void(0);;" data-id="{{$value.id}}" class="btn btn-primary btn-xs" id="pass">批准</a>
+            <a href="javascript:void(0);;" data-id="{{$value.id}}" class="btn btn-warning btn-xs" id="reject">拒绝</a>
             {{else}}
-            <a href="javascript:void(0);;" data-di="{{$value.id}}" class="btn btn-danger btn-xs" id="delete">删除</a>
+            <a href="javascript:void(0);;" data-id="{{$value.id}}" class="btn btn-danger btn-xs" id="delete">删除</a>
             {{/if}}
           
         </td>
@@ -237,9 +237,34 @@
       $('tbody').on('click', '#delete', function (e) {
         // 阻止默认事件
         e.preventDefault();
+        // 发送请求删除
+        $.post({
+          url: BigNew.comment_delete,
+          data: {
+            id: $(this).attr('data-id')
+          },
+          success: function (res) {
+            // 重新获取页面信息渲染
+            $.get({
+              url: BigNew.comment_list,
+              data: {
+                page: mypage,
+                perpage: perpage
+              },
+              success: function (res) {
+                // 页数改变的时候 跳到上一页
+                if (res.data.data === 0) {
+                  $('#pagination').twbsPagination('changeTotalPages', res.data.totalPage, mypage - 1);
+                }
+                var htmlStr = template('list', res);
+                $('tbody').html(htmlStr);
+              }
 
+            });
+
+          }
+        });
       });
-
     })
 
   </script>
