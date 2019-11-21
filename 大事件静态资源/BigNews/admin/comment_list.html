@@ -268,7 +268,7 @@
 
       // 批准事件
       $('tbody').on('click', '#pass', function () {
-        var check = confirm('请确认是否删除！！！');
+        var check = confirm('请确认是否审核通过！！！');
         if (check) {
           // 发送请求批准
           $.post({
@@ -298,7 +298,7 @@
 
       // 拒绝评论事件
       $('tbody').on('click', '#reject', function () {
-        var check = confirm('请确认是否删除！！！');
+        var check = confirm('请确认是否审核不通过！！！');
         if (check) {
           // 发送请求批准
           $.post({
