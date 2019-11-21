@@ -233,34 +233,37 @@
         }
       });
 
+
       // 删除事件
       $('tbody').on('click', '#delete', function () {
-
-        // 发送请求删除
-        $.post({
-          url: BigNew.comment_delete,
-          data: {
-            id: $(this).attr('data-id')
-          },
-          success: function (res) {
-            // 重新获取页面信息渲染
-            $.get({
-              url: BigNew.comment_list,
-              data: {
-                page: mypage,
-                perpage: perpage
-              },
-              success: function (res) {
-                // 页数改变的时候 跳到上一页
-                if (res.data.data === 0) {
-                  $('#pagination').twbsPagination('changeTotalPages', res.data.totalPage, mypage - 1);
+        var check = confirm('请确认是否删除！！！');
+        if (check) {
+          // 发送请求删除
+          $.post({
+            url: BigNew.comment_delete,
+            data: {
+              id: $(this).attr('data-id')
+            },
+            success: function (res) {
+              // 重新获取页面信息渲染
+              $.get({
+                url: BigNew.comment_list,
+                data: {
+                  page: mypage,
+                  perpage: perpage
+                },
+                success: function (res) {
+                  // 页数改变的时候 跳到上一页
+                  if (res.data.data === 0) {
+                    $('#pagination').twbsPagination('changeTotalPages', res.data.totalPage, mypage - 1);
+                  }
+                  var htmlStr = template('list', res);
+                  $('tbody').html(htmlStr);
                 }
-                var htmlStr = template('list', res);
-                $('tbody').html(htmlStr);
-              }
-            });
-          }
-        });
+              });
+            }
+          });
+        }
       });
 
       // 批准事件
