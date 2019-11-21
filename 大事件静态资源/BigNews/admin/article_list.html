@@ -98,7 +98,6 @@
         {{/each}}
     </script>
 
-
     <script>
         $(function () {
             // 渲染筛选
@@ -176,7 +175,7 @@
                             $('tbody').html(htmlStr);
                             $('#pagination').show();
                         } else {
-                            $('tbody').html('<tr><td colspan=6>查找的数据为空</td></tr>');
+                            $('tbody').html('<tr><td colspan=6 style="text-align:center">查找的数据为空</td></tr>');
                             $('#pagination').hide();
                         }
                     }
