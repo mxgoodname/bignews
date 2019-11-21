@@ -174,13 +174,15 @@
         <td>{{$value.date}}</td>
         <td>{{$value.state}}</td>
         <td class="text-center">
-            {{if $value.state==='已通过'}}
+           
+            
+            {{if $value.state==='待审核'}} 
+            <a href="javascript:void(0);;"  class="btn btn-primary btn-xs">批准</a>
             <a href="javascript:void(0);;"  class="btn btn-warning btn-xs">拒绝</a>
-            {{else if $value.state==='待审核'}} 
-            <a href="javascript:void(0);;"  class="btn btn-primary btn-xs">通过</a>
             {{else}}
+            <a href="javascript:void(0);;" data-di="{{$value.id}}" class="btn btn-danger btn-xs" id="delete">删除</a>
             {{/if}}
-          <a href="javascript:void(0);;" class="btn btn-danger btn-xs">删除</a>
+          
         </td>
       </tr>
     {{/each}}
@@ -191,6 +193,7 @@
     $(function () {
       var mypage = 1;
       var perpage = 10;
+      // 获取数据渲染页面
       $.get({
         url: BigNew.comment_list,
         data: {
@@ -200,8 +203,6 @@
         success: function (res) {
           var htmlStr = template('list', res);
           $('tbody').html(htmlStr);
-
-
           // 页数插件使用
           window.pagObj = $('#pagination').twbsPagination({
             totalPages: res.data.totalPage,
@@ -231,6 +232,14 @@
           });
         }
       });
+
+      // 删除事件
+      $('tbody').on('click', '#delete', function (e) {
+        // 阻止默认事件
+        e.preventDefault();
+
+      });
+
     })
 
   </script>
