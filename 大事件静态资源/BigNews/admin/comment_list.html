@@ -217,22 +217,36 @@
               mypage = page;
               // console.log(page);
               // 获取此页的数据重新渲染页面
-              $.get({
-                url: BigNew.comment_list,
-                data: {
-                  page: mypage,
-                  perpage: perpage
-                },
-                success: function (res) {
-                  var htmlStr = template('list', res);
-                  $('tbody').html(htmlStr);
-                }
-              });
+              // $.get({
+              //   url: BigNew.comment_list,
+              //   data: {
+              //     page: mypage,
+              //     perpage: perpage
+              //   },
+              //   success: function (res) {
+              //     var htmlStr = template('list', res);
+              //     $('tbody').html(htmlStr);
+              //   }
+              // });
+              getDate();
             }
           });
         }
       });
 
+      function getDate() {
+        $.get({
+          url: BigNew.comment_list,
+          data: {
+            page: mypage,
+            perpage: perpage
+          },
+          success: function (res) {
+            var htmlStr = template('list', res);
+            $('tbody').html(htmlStr);
+          }
+        });
+      }
 
       // 删除事件
       $('tbody').on('click', '#delete', function () {
@@ -278,18 +292,19 @@
             },
             success: function (res) {
               // 重新获取页面信息渲染
-              $.get({
-                url: BigNew.comment_list,
-                data: {
-                  page: mypage,
-                  perpage: perpage
-                },
-                success: function (res) {
-                  // 重新渲染
-                  var htmlStr = template('list', res);
-                  $('tbody').html(htmlStr);
-                }
-              });
+              // $.get({
+              //   url: BigNew.comment_list,
+              //   data: {
+              //     page: mypage,
+              //     perpage: perpage
+              //   },
+              //   success: function (res) {
+              //     // 重新渲染
+              //     var htmlStr = template('list', res);
+              //     $('tbody').html(htmlStr);
+              //   }
+              // });
+              getDate();
             }
           });
         }
@@ -308,22 +323,25 @@
             },
             success: function (res) {
               // 重新获取页面信息渲染
-              $.get({
-                url: BigNew.comment_list,
-                data: {
-                  page: mypage,
-                  perpage: perpage
-                },
-                success: function (res) {
-                  // 重新渲染
-                  var htmlStr = template('list', res);
-                  $('tbody').html(htmlStr);
-                }
-              });
+              // $.get({
+              //   url: BigNew.comment_list,
+              //   data: {
+              //     page: mypage,
+              //     perpage: perpage
+              //   },
+              //   success: function (res) {
+              //     // 重新渲染
+              //     var htmlStr = template('list', res);
+              //     $('tbody').html(htmlStr);
+              //   }
+              // });
+              getDate();
             }
           });
         }
       });
+
+
 
     })
 
