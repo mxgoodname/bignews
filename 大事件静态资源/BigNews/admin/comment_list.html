@@ -234,9 +234,8 @@
       });
 
       // 删除事件
-      $('tbody').on('click', '#delete', function (e) {
-        // 阻止默认事件
-        e.preventDefault();
+      $('tbody').on('click', '#delete', function () {
+
         // 发送请求删除
         $.post({
           url: BigNew.comment_delete,
@@ -259,12 +258,39 @@
                 var htmlStr = template('list', res);
                 $('tbody').html(htmlStr);
               }
-
             });
-
           }
         });
       });
+
+      // 批准事件
+      $('tbody').on('click', '#pass', function () {
+
+        // 发送请求批准
+        $.post({
+          url: BigNew.comment_pass,
+          data: {
+            id: $(this).attr('data-id')
+          },
+          success: function (res) {
+            // 重新获取页面信息渲染
+            $.get({
+              url: BigNew.comment_list,
+              data: {
+                page: mypage,
+                perpage: perpage
+              },
+              success: function (res) {
+                // 重新渲染
+                var htmlStr = template('list', res);
+                $('tbody').html(htmlStr);
+              }
+            });
+          }
+        });
+      });
+
+
     })
 
   </script>
