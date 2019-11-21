@@ -291,6 +291,32 @@
       });
 
 
+      // 拒绝评论事件
+      $('tbody').on('click', '#reject', function () {
+        // 发送请求批准
+        $.post({
+          url: BigNew.comment_reject,
+          data: {
+            id: $(this).attr('data-id')
+          },
+          success: function (res) {
+            // 重新获取页面信息渲染
+            $.get({
+              url: BigNew.comment_list,
+              data: {
+                page: mypage,
+                perpage: perpage
+              },
+              success: function (res) {
+                // 重新渲染
+                var htmlStr = template('list', res);
+                $('tbody').html(htmlStr);
+              }
+            });
+          }
+        });
+      });
+
     })
 
   </script>
