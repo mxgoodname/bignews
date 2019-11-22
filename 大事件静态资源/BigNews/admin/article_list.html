@@ -221,6 +221,12 @@
                 }
             });
 
+            // 发表文章按钮点击事件
+            $('#release_btn').on('click', function (e) {
+                // 左侧导航栏样式
+                parent.$('.level02 li>a').eq(1).parent().addClass('active').siblings().removeClass('active');
+            });
+
         })
 
     </script>

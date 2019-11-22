@@ -30,7 +30,7 @@
         </div>
         <div class="container-fluid common_con">
             <form class="form-horizontal article_form" id="form">
-                <input type="hidden" id="caregoryId" name="id" value="">
+                <!-- <input type="hidden" id="caregoryId" name="id" value=""> -->
                 <div class="form-group">
                     <label for="inputTitle" class="col-sm-2 control-label">文章标题：</label>
                     <div class="col-sm-10">
@@ -114,7 +114,7 @@
 
 
             // 富文本编辑器
-            var E = window.wangEditor
+            var E = window.wangEditor;
             var editor = new E('#editor')
             // 或者 var editor = new E( document.getElementById('editor') )
             editor.create();
@@ -141,6 +141,8 @@
                 e.preventDefault();
 
                 var form = $('#form')[0];
+                console.log(form);
+
                 var mydata = new FormData(form);
                 mydata.append('content', editor.txt.html());
                 mydata.append('state', '已发布');
@@ -152,6 +154,9 @@
                     success: function (res) {
                         if (res.code === 200) {
                             window.history.back();
+                            // 左侧导航栏样式优化
+                            parent.$('.level02 li>a').eq(0).parent().addClass('active').siblings().removeClass('active');
+
                         }
                     }
                 })
@@ -173,6 +178,9 @@
                     success: function (res) {
                         if (res.code === 200) {
                             window.history.back();
+                            // 左侧导航栏样式优化
+                            parent.$('.level02 li>a').eq(0).parent().addClass('active').siblings().removeClass('active');
+
                         }
                     }
                 })
