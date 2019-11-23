@@ -289,6 +289,16 @@
     
     </script>
 
+    <!-- 焦点关注模板 -->
+    <script type="text/html" id="focus-list">
+        {{each data v index}}
+        <li><a href="./article.html?">{{v.intro}}</a></li>
+
+        {{/each}}
+    
+    </script>
+
+
     <script>
 
 
@@ -335,6 +345,17 @@
             template.defaults.imports.now = new Date().getMonth() + 1;
 
 
+            // 焦点关注渲染页面
+            $.get({
+                url: BigNewIndex.attention,
+                success: function (res) {
+                    console.log(res);
+
+                    var htmlStr = template('focus-list', res);
+                    $('.guanzhu_list').html(htmlStr);
+
+                }
+            });
         })
 
     </script>
