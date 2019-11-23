@@ -349,8 +349,6 @@
             $.get({
                 url: BigNewIndex.attention,
                 success: function (res) {
-                    console.log(res);
-
                     var htmlStr = template('focus-list', res);
                     $('.guanzhu_list').html(htmlStr);
 
