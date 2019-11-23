@@ -150,13 +150,13 @@
             <div class="common_wrap">
                 <h3><i class="fa fa-bar-chart"></i> 一周热门排行</h3>
                 <ul class="content_list hotrank_list">
-                    <li><span class="first">1</span><a href="#">神奇的水滴摄影，泡泡中的世界泡泡中的世界</a></li>
+                    <!-- <li><span class="first">1</span><a href="#">神奇的水滴摄影，泡泡中的世界泡泡中的世界</a></li>
                     <li><span class="second">2</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
                     <li><span class="third">3</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
                     <li><span>4</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
                     <li><span>5</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
                     <li><span>6</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><span>7</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
+                    <li><span>7</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li> -->
                 </ul>
             </div>
             <div class="common_wrap">
@@ -257,8 +257,23 @@
                 </div>
             </div>
         {{/each}}
-    
-    
+    </script>
+
+    <!-- 热门排行模板 -->
+    <script type="text/html" id="hotrank-list">
+        {{each data v index}}
+        <li>
+        {{if index===0}}
+        <span class="first">
+            {{else if index===1}}
+            <span class="second">
+            {{else if index===2}}
+            <span class="third">
+            {{else}}
+            <span>
+                {{/if}}
+        {{index+1}}</span><a href="./article.html?id={{v.id}}">{{v.title}}</a></li>
+        {{/each}}
     </script>
 
     <script>
@@ -279,6 +294,16 @@
                 success: function (res) {
                     var htmlStr = template('news-list', res);
                     $('.common_news').html(htmlStr);
+
+                }
+            });
+
+            // 一周热门排行部分获取数据
+            $.get({
+                url: BigNewIndex.rank,
+                success: function (res) {
+                    var htmlStr = template('hotrank-list', res);
+                    $('.hotrank_list').html(htmlStr);
 
                 }
             });
