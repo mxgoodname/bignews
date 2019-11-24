@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+
 </head>
 
 <body>
@@ -97,7 +98,7 @@
                 4条评论
             </div> -->
 
-            <div class="comment_list_con">
+            <!-- <div class="comment_list_con">
                 <div class="comment_detail_list">
                     <div class="person_pic fl">乔</div>
                     <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
@@ -126,7 +127,10 @@
                         遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
                     </div>
                 </div>
-            </div>
+            </div> -->
+        </div>
+        <div class="row text-center">
+            <ul class="pagination" id="pagination"></ul>
         </div>
         <div class="right_con setfl">
             <div class="common_wrap">
@@ -216,13 +220,13 @@
         <li>
         {{if index===0}}
         <span class="first">
-            {{else if index===1}}
-            <span class="second">
-            {{else if index===2}}
-            <span class="third">
-            {{else}}
-            <span>
-                {{/if}}
+        {{else if index===1}}
+        <span class="second">
+        {{else if index===2}}
+        <span class="third">
+        {{else}}
+        <span>
+            {{/if}}
         {{index+1}}</span><a href="./article.html?id={{v.id}}">{{v.title}}</a></li>
         {{/each}}
     </script>
@@ -250,40 +254,63 @@
 
     <!-- 文章详情模板 -->
     <script type="text/html" id="article">
+
         <div class="breadcrumb">
-                当前位置： <a href="./index.html">首页</a> &gt; <a href="./list.html?id={{v.categotryId}}">科技</a> &gt; 文章详情
+                当前位置： <a href="./index.html">首页</a> &gt; <a href="./list.html?id={{$data.categoryId}}">科技</a> &gt; 文章详情
             </div>
-            <h3 class="article_title">{{v.title}}</h3>
-            <div class="article_info">{{v.author}} 发布于 {{v.date}}&nbsp;&nbsp;&nbsp;分类: {{v.caregory}}&nbsp;&nbsp;&nbsp;阅读:
-                ({{v.read}})&nbsp;&nbsp;&nbsp;评论: ({{v.comments}})</div>
+            <h3 class="article_title">{{data.title}}</h3>
+            <div class="article_info">{{data.author}} 发布于 {{data.date}}&nbsp;&nbsp;&nbsp;分类: {{data.category}}&nbsp;&nbsp;&nbsp;阅读:
+                ({{data.read}})&nbsp;&nbsp;&nbsp;评论: ({{data.comments}})</div>
             <div class="article_con">
-                {{@ v.content}}
+                {{@ data.content}}
         
             </div>
             <div class="article_links">
-                上一篇： <a href="#">世界第一台可以玩游戏的冰箱</a><br>
-                下一篇： <a href="#">世界第一个可以玩游戏的马桶、世界上第一个可以玩游戏的茶杯</a>
+                上一篇： 
+                    {{if data.prev!==null}}
+                <a href='./article.html?id={{data.prev.id}}'>{{data.prev.title}}</a><br>
+                {{else}}
+                上边没有了
+                {{/if}}
+                
+                下一篇： 
+                {{if data.next!==null}}<a href="./article.html?id={{data.next.id}}">{{data.next.title}}</a>
+                {{else}}
+                没有下一篇了
+                {{/if}}
             </div>
-        
             <form action="" class="comment_form">
                 <div class="form_group">
                     <label>用户名：</label>
                     <input type="text" placeholder="请输入用户名" class="comment_name">
-                </div>
-                <div class="form_group">
-                    <label>评论内容：</label>
-                    <textarea placeholder="请发表您的评论" class="comment_input"></textarea>
-                </div>
-                <div class="form_group">
-                    <input type="submit" name="" value="评 论" class="comment_sub"></div>
-            </form>
-        
-            <div class="comment_count">
-                4条评论
-            </div>
-    
-    
+                    </div>
+                    <div class="form_group">
+                        <label>评论内容：</label>
+                        <textarea placeholder="请发表您的评论" class="comment_input"></textarea>
+                    </div>
+                    <div class="form_group">
+                        <input type="submit" name="" value="评 论" class="comment_sub"></div>
+                </form>
     </script>
+
+    <!-- 评论内容渲染 -->
+    <script type="text/html" id="com-list">
+        <div class="comment_count">
+            {{data.length}}条评论
+        </div>
+        <div class="comment_list_con">
+        {{each data v index}}
+        <div class="comment_detail_list">
+            <div class="person_pic fl">{{v.author.slice(0,1)}}</div>
+            <div class="name_time fl"><b>{{v.author}}</b><span>{{v.date}}</span></div>
+            <div class="comment_text fl">
+                {{v.content}}
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    </script>
+
 
     <script>
         $(function () {
@@ -292,7 +319,7 @@
                 url: BigNewIndex.rank,
                 success: function (res) {
                     var htmlStr = template('hotrank-list', res);
-                    $('.hotrank_list').html(htmlStr);
+                    $('.content_list').html(htmlStr);
                 }
             });
 
@@ -320,7 +347,6 @@
 
             // 文章详情
             var id = location.search.slice(4);
-
             $.get({
                 url: BigNewIndex.article,
                 data: {
@@ -328,12 +354,39 @@
                 },
                 success: function (res) {
                     var htmlStr = template('article', res);
-                    $('.setfr').html(htmlStr);
-
+                    $('.setfr').prepend(htmlStr);
                 }
+            });
+
+
+            // 发表评论事件
+            $('.setfr').on('click', '.comment_sub', function (e) {
+                e.preventDefault();
+                $.post({
+                    url: BigNewIndex.post_comment,
+                    data: {
+                        articleId: id,
+                        author: $('.comment_name').val(),
+                        content: $('.comment_input').val()
+                    },
+                    success: function (res) {
+                        $('.comment_name').val('');
+                        $('.comment_input').val('');
+                    }
+                });
             })
 
-
+            // 评论内容渲染
+            $.get({
+                url: BigNewIndex.get_comment,
+                data: {
+                    articleId: id
+                },
+                success: function (res) {
+                    var htmlStr = template('com-list', res);
+                    $('.setfr').append(htmlStr);
+                }
+            });
 
         })
 
